@@ -29,7 +29,7 @@ get_tracks_from_artist() {
 	if [ -z "$1" ] || [ "$1" == "null" ]; then
 		return
 	fi
-	curl -s -X GET "https://api.spotify.com/v1/artists/$1/top-tracks?country=$country" -H "Accept: application/json" | jq -r ".tracks[].id"
+	curl -s -X GET "https://api.spotify.com/v1/artists/$1/top-tracks?country=$country" -H "Accept: application/json" | jq -r ".tracks[:10][].id"
 }
 
 get_artists_top_tracks() {
