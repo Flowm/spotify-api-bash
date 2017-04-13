@@ -5,12 +5,8 @@ set -eu
 # Usage: ./create_playlist_from_artists.sh <filename>
 # Requires: curl and jq
 
-# Open this URL to obtain the auth token:
-#	https://accounts.spotify.com/authorize?client_id=109e36592e9c471bb5bb15a83a4a78de&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A9876&scope=playlist-modify-private
-# Obtain the access_token from the redirected URI
-#	Example URI: http://localhost:9876/#access_token=XXYOURTOKENHEREXX&token_type=Bearer&expires_in=3600
-access_token=""
-
+# Configure the access_token in config.cfg
+source ./config.cfg
 
 # Internal settings
 client_id="109e36592e9c471bb5bb15a83a4a78de"
@@ -18,7 +14,7 @@ country="DE"
 headers=(-H "Accept application/json" -H "Authorization: Bearer ${access_token}" )
 user_id=$(curl -s -X GET "https://api.spotify.com/v1/me" "${headers[@]}" | jq -r ".id")
 
-
+# Funcs
 get_artist_id() {
 	# Get the first artist from search
 	curl -s -X GET "https://api.spotify.com/v1/search" -G --data-urlencode "q=$1" --data-urlencode "type=artist" --data-urlencode "limit=1" -H "Accept: application/json" | jq -r ".artists.items[0]?.id?"
