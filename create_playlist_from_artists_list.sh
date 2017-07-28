@@ -17,7 +17,7 @@ user_id=$(curl -s -X GET "https://api.spotify.com/v1/me" "${headers[@]}" | jq -r
 # Funcs
 get_artist_id() {
 	# Get the first artist from search
-	curl -s -X GET "https://api.spotify.com/v1/search" -G --data-urlencode "q=$1" --data-urlencode "type=artist" --data-urlencode "limit=1" -H "Accept: application/json" | jq -r ".artists.items[0]?.id?"
+	curl -s -X GET "https://api.spotify.com/v1/search" -G --data-urlencode "q=$1" --data-urlencode "type=artist" --data-urlencode "limit=1" "${headers[@]}" | jq -r ".artists.items[0]?.id?"
 }
 
 get_tracks_from_artist() {
@@ -25,7 +25,7 @@ get_tracks_from_artist() {
 	if [ -z "$1" ] || [ "$1" == "null" ]; then
 		return
 	fi
-	curl -s -X GET "https://api.spotify.com/v1/artists/$1/top-tracks?country=$country" -H "Accept: application/json" | jq -r ".tracks[:10][].id"
+	curl -s -X GET "https://api.spotify.com/v1/artists/$1/top-tracks?country=$country" -H "Accept: application/json" "${headers[@]}" | jq -r ".tracks[:10][].id"
 }
 
 get_artists_top_tracks() {
